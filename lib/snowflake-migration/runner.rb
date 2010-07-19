@@ -13,7 +13,7 @@ module Snowflake
       end
 
       def migrate_up!
-        migrations.sort {|migration1, migration2| migration1.guid <=> migration2.guid }.each {|migration| migration.up! }
+        migrations.sort {|migration1, migration2| migration1.guid <=> migration2.guid }.each { |migration| migration.up! }
       rescue StandardError => e
         # @todo report it
         raise e
