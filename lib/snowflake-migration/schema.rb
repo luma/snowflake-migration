@@ -45,7 +45,7 @@ module Snowflake
         Snowflake.connection.watch( klass.meta_key_for( 'schema' ), klass.meta_key_for( 'schema', migration.guid ) )
 
         if include?( migration.guid )
-          raise ArgumentError, "Migration #{migration.title} (#{migration.guid}) has already been applied to #{self.class.to_s} and cannot be applied again."
+          raise DuplicateMigrationError, "Migration #{migration.title} (#{migration.guid}) has already been applied to #{self.class.to_s} and cannot be applied again."
         end
 
         result = Snowflake.connection.multi do |multi|

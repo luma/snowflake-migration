@@ -28,7 +28,7 @@ module Snowflake
       # @todo On errors we should handle, cleanup, and then reraise...
       def up!
         if applied?
-          raise ArgumentError, "Migration #{@title} (#{@guid}) has already been applied to one or more of the target elements (#{applied_to.collect {|e| e.to_s }.join(', ')}) and cannot be applied again."
+          raise DuplicateMigrationError, "Migration #{@title} (#{@guid}) has already been applied to one or more of the target elements (#{applied_to.collect {|e| e.to_s }.join(', ')}) and cannot be applied again."
         end
 
         begin

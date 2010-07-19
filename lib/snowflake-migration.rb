@@ -7,6 +7,8 @@ require 'ostruct'
 
 module Snowflake
   module Migration
+    class DuplicateMigrationError < SnowflakeError
+    end
 
   end # module Migration
 end # module Snowflake
