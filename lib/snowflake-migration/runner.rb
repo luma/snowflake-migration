@@ -6,7 +6,7 @@ module Snowflake
       end
 
       def migration(title, guid, *elements, &block)
-        migrations << Context.new( title, guid, elements, &block )
+        migrations << ::Snowflake::Migration::Context.new( title, guid, elements, &block )
       rescue StandardError => e
         # @todo try and report syntax errors in a friendly fashion
         raise e
