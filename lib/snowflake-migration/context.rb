@@ -42,7 +42,7 @@ module Snowflake
 
         # @todo check result?
 
-        @timestamp = Time.now.to_i
+        @timestamp = Time.now.utc.to_i
         @elements.each do |element|
           element.schema << Migration.new(element, @guid, @timestamp, @title, @description, @elements)
         end
