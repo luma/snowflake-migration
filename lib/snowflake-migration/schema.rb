@@ -14,6 +14,19 @@ module Snowflake
         Snowflake.connection.zcard( klass.meta_key_for( 'schema' ) )
       end
 
+      def include?( thing )
+        guid =  case thing
+                when Integer, String
+                  thing.to_s
+                when Migration
+                  thing.guid
+                else
+                  raise ArgumentError, "Schema#include? accepts only Integers, Strings, or Migrations"
+                end
+
+        Snowflake.connection.zscore( klass.meta_key_for( 'schema' ), guid ) != nil
+      end
+
       def first
         each.first
       end
@@ -71,15 +84,6 @@ module Snowflake
         
         reload
         self
-      end
-      
-      def include?( thing )
-        case thing
-        when Integer, String
-          Snowflake.connection.zscore( klass.meta_key_for( 'schema' ), thing.to_s ) != nil
-        else
-          super
-        end
       end
 
       def self.get( klass )
