@@ -5,22 +5,22 @@ module Snowflake
         @migrations ||= []
       end
 
-      def migration(title, guid, *elements, &block)
-        migrations << ::Snowflake::Migration::Context.new( title, guid, elements, &block )
+      def migration(title, version, *elements, &block)
+        migrations << ::Snowflake::Migration::Context.new( title, version, elements, &block )
       rescue StandardError => e
         # @todo try and report syntax errors in a friendly fashion
         raise e
       end
 
       def migrate_up!
-        migrations.sort {|migration1, migration2| migration1.guid <=> migration2.guid }.each { |migration| migration.up! }
+        migrations.sort {|migration1, migration2| migration1.version <=> migration2.version }.each { |migration| migration.up! }
       rescue StandardError => e
         # @todo report it
         raise e
       end
 
       def migrate_down!
-        migrations.sort {|migration1, migration2| migration1.guid <=> migration2.guid }.each {|migration| migration.down! }
+        migrations.sort {|migration1, migration2| migration1.version <=> migration2.version }.each {|migration| migration.down! }
       rescue StandardError => e
         # @todo report it
         raise e

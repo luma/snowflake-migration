@@ -1,10 +1,10 @@
 module Snowflake
   module Migration
     class Context
-      attr_reader :title, :guid, :timestamp, :elements
-      def initialize(title, guid, elements, &block)
+      attr_reader :title, :version, :timestamp, :elements
+      def initialize(title, version, elements, &block)
         @title = title
-        @guid = guid
+        @version = version
         @timestamp = nil
         @elements = elements
 
@@ -17,7 +17,7 @@ module Snowflake
       # Indicates if the migration has been applied to even one of the elements.
       def applied?
         @elements.each do |element|
-          if element.schema.include?( @guid )
+          if element.schema.include?( @version )
             return true
           end
         end
@@ -27,10 +27,10 @@ module Snowflake
 
       # @todo On errors we should handle, cleanup, and then reraise...
       def up!
-        Snowflake::Migration.logger.info "Applying migration #{@title} (#{@guid}) on: #{@elements.join(', ')}"
+        Snowflake::Migration.logger.info "Applying migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
 
         if applied?
-          raise DuplicateMigrationError, "Migration \"#{@title}\" (#{@guid}) has already been applied to one or more of the target elements (#{applied_to.collect {|e| e.to_s }.join(', ')}) and cannot be applied again."
+          raise DuplicateMigrationError, "Migration \"#{@title}\" (#{@version}) has already been applied to one or more of the target elements (#{applied_to.collect {|e| e.to_s }.join(', ')}) and cannot be applied again."
         end
 
         begin
@@ -44,7 +44,7 @@ module Snowflake
 
         @timestamp = Time.now.utc.to_i
         @elements.each do |element|
-          element.schema << Migration.new(element, @guid, @timestamp, @title, @description, @elements)
+          element.schema << Migration.new(element, @version, @timestamp, @title, @description, @elements)
         end
 
         true
@@ -53,10 +53,10 @@ module Snowflake
       # @todo I don't think I've thought through undoing migrations particularly well, more thought needed...
       # @todo On errors we should handle, cleanup, and then reraise...
       def down!
-        Snowflake::Migration.logger.info "Undoing migration #{@title} (#{@guid}) on: #{@elements.join(', ')}"
+        Snowflake::Migration.logger.info "Undoing migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
 
         unless applied?
-          raise ArgumentError, "Migration \"#{@title}\" (#{@guid}) has not been applied to one or more of the target elements (#{(@elements - applied_to).collect {|e| e.to_s }.join(', ')}) and therefore cannot be revert."
+          raise ArgumentError, "Migration \"#{@title}\" (#{@version}) has not been applied to one or more of the target elements (#{(@elements - applied_to).collect {|e| e.to_s }.join(', ')}) and therefore cannot be revert."
         end
 
         begin
@@ -69,7 +69,7 @@ module Snowflake
         # @todo undo the migration
         @timestamp = nil
         @elements.each do |element|
-          element.schema.delete( Migration.new(element, @guid, @timestamp, @title, @description, @elements) )
+          element.schema.delete( Migration.new(element, @version, @timestamp, @title, @description, @elements) )
         end
       end
 
@@ -89,7 +89,7 @@ module Snowflake
       
       def applied_to
         @elements.delete_if do |element|
-          !element.schema.include?( @guid )
+          !element.schema.include?( @version )
         end        
       end
     end # class Context

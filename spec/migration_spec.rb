@@ -7,7 +7,7 @@ describe Snowflake::Migration::Migration do
 
   it "returns a hash version of the migration" do
     @migration.to_hash.should == {
-      'guid'           => @migration.guid,
+      'version'           => @migration.version,
       'timestamp'      => @migration.timestamp,
       'title'          => @migration.title,
       'description'    => @migration.description,
@@ -28,7 +28,7 @@ describe Snowflake::Migration::Migration do
       @migration.should_not == Snowflake::Migration::Migration.new( String, '1', @migration.timestamp, "Test Migration", "It's a test!", [Company] )
     end
 
-    it "should not indicate that two migrations are the same when they have different guids" do
+    it "should not indicate that two migrations are the same when they have different versions" do
       @migration.should_not == Snowflake::Migration::Migration.new( Company, 'bob', @migration.timestamp, "Test Migration", "It's a test!", [Company] )
     end
 

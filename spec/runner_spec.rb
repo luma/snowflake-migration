@@ -34,8 +34,8 @@ describe "Snowflake::Migration::Runner" do
         Company.schema.length.should == 1
       end
 
-      it "creates a migration with the correct guid" do
-        Company.schema.first.guid.should == '1'
+      it "creates a migration with the correct version" do
+        Company.schema.first.version.should == '1'
       end
 
       it "creates a migration with the correct title" do

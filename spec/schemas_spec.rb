@@ -15,8 +15,8 @@ describe Snowflake::Migration::Schemas do
     end
     
     it "persists migrations to the db" do
-      Snowflake.connection.zrangebyscore( Company.meta_key_for( 'schema' ), "-inf", "+inf" ).should == [@migration.guid]
-      Snowflake.connection.hgetall( Company.meta_key_for( 'schema', @migration.guid ) ).should == @migration.to_hash.merge('timestamp' => @migration.timestamp.to_s)
+      Snowflake.connection.zrangebyscore( Company.meta_key_for( 'schema' ), "-inf", "+inf" ).should == [@migration.version]
+      Snowflake.connection.hgetall( Company.meta_key_for( 'schema', @migration.version ) ).should == @migration.to_hash.merge('timestamp' => @migration.timestamp.to_s)
     end
   end
 end

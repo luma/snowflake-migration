@@ -1,11 +1,11 @@
 module Snowflake
   module Migration
     class Migration
-      attr_reader :klass, :guid, :timestamp, :title, :description, :klasses
+      attr_reader :klass, :version, :timestamp, :title, :description, :klasses
 
-      def initialize(klass, guid, timestamp, title, description, klasses)
+      def initialize(klass, version, timestamp, title, description, klasses)
         @klass = klass
-        @guid = guid
+        @version = version
         @klasses = klasses
         @timestamp = timestamp.to_i
         @title = title
@@ -14,7 +14,7 @@ module Snowflake
 
       def to_hash
         {
-          'guid'           => @guid,
+          'version'           => @version,
           'timestamp'     => @timestamp,
           'title'          => @title,
           'description'    => @description,
@@ -24,11 +24,11 @@ module Snowflake
 
       # Comparing objects inside a 'case' statement
       # def ===(other)
-      #   @klass == other.klass && @guid == other.guid && @timestamp == other.timestamp
+      #   @klass == other.klass && @version == other.version && @timestamp == other.timestamp
       # end
 
       def ==(other)
-        @klass == other.klass && @guid == other.guid && @timestamp == other.timestamp
+        @klass == other.klass && @version == other.version && @timestamp == other.timestamp
       end
 
       # Comparing objects
@@ -53,7 +53,7 @@ module Snowflake
       end
 
       def self.from_hash( klass, hash )
-        Migration.new( klass, hash['guid'], hash['timestamp'], hash['title'], hash['description'], hash['klasses'].split(',') )
+        Migration.new( klass, hash['version'], hash['timestamp'], hash['title'], hash['description'], hash['klasses'].split(',') )
       end
     end # class Migration
   end # module Migration

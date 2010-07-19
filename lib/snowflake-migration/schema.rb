@@ -15,16 +15,16 @@ module Snowflake
       end
 
       def include?( thing )
-        guid =  case thing
+        version =  case thing
                 when Integer, String
                   thing.to_s
                 when Migration
-                  thing.guid
+                  thing.version
                 else
                   raise ArgumentError, "Schema#include? accepts only Integers, Strings, or Migrations"
                 end
 
-        Snowflake.connection.zscore( klass.meta_key_for( 'schema' ), guid ) != nil
+        Snowflake.connection.zscore( klass.meta_key_for( 'schema' ), version ) != nil
       end
 
       def first
@@ -55,20 +55,20 @@ module Snowflake
         # Fail if these are modified while we are attempt to add a migration -- we must be 
         # working on the newest data. The reason for this is that the data can be modified
         # between the #include? method call and the multi block.
-        Snowflake.connection.watch( klass.meta_key_for( 'schema' ), klass.meta_key_for( 'schema', migration.guid ) )
+        Snowflake.connection.watch( klass.meta_key_for( 'schema' ), klass.meta_key_for( 'schema', migration.version ) )
 
-        if include?( migration.guid )
-          raise DuplicateMigrationError, "Migration #{migration.title} (#{migration.guid}) has already been applied to #{self.class.to_s} and cannot be applied again."
+        if include?( migration.version )
+          raise DuplicateMigrationError, "Migration #{migration.title} (#{migration.version}) has already been applied to #{self.class.to_s} and cannot be applied again."
         end
 
         result = Snowflake.connection.multi do |multi|
-          multi.zadd( klass.meta_key_for( 'schema' ), migration.timestamp, migration.guid )
-          multi.hmset( *migration.to_hash.to_a.flatten.unshift( klass.meta_key_for( 'schema', migration.guid ) ) )
+          multi.zadd( klass.meta_key_for( 'schema' ), migration.timestamp, migration.version )
+          multi.hmset( *migration.to_hash.to_a.flatten.unshift( klass.meta_key_for( 'schema', migration.version ) ) )
         end
 
         # If the result is nil then the data was modified as we were trying to update it.
         if result == nil
-          raise OutOfDateError, "The migration #{migration.title} (#{migration.guid}) could not be added as the operation was interrupted by another update. Please try again."
+          raise OutOfDateError, "The migration #{migration.title} (#{migration.version}) could not be added as the operation was interrupted by another update. Please try again."
         end
 
         reload
@@ -78,8 +78,8 @@ module Snowflake
       def delete(migration)
         # @todo error check
         Snowflake.connection.multi do |multi|
-          multi.zrem( klass.meta_key_for( 'schema' ), migration.guid )
-          multi.del( klass.meta_key_for( 'schema', migration.guid ) )
+          multi.zrem( klass.meta_key_for( 'schema' ), migration.version )
+          multi.del( klass.meta_key_for( 'schema', migration.version ) )
         end
         
         reload
