@@ -1,7 +1,7 @@
 module Snowflake
   module Migration
     module Schemas
-      ::Snowflake::Element::Model.add_extensions self
+      ::Snowflake::Model.add_extensions self
 
       # Retrieves the schema info for this element.
       #
