@@ -1,0 +1,51 @@
+= snowflake-migration
+
+* http://github.com/luma/snowflake-migration
+
+== DESCRIPTION:
+
+Schemaless is a terrible term as it doesn't imply what most people mean when they use it. Most people actually mean there is no *fixed* schema, or that the schema can be changed on an object by object basis. Because there actually *is* a schema, you'll need to manage changes to it to ensure your business logic and data stay current with each other. This gem adds schema change management to Snowflake (http://github.com/luma/snowflake), including migrations and the ability to track schema changes within models over time.
+
+== FEATURES/PROBLEMS:
+
+* allows you to manage schema changes to your Snowflake models;
+* provides migration so you can bring your data in sync with your models/business logic.
+
+== SYNOPSIS:
+
+  FIX (code sample of usage)
+
+== REQUIREMENTS:
+
+* bundler
+* uuidtools >= 2.1.1
+* snowflake >= 0.0.2
+
+== INSTALL:
+
+  gem install snowflake-migration
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2010 Rolly
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
