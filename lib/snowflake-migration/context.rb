@@ -27,7 +27,7 @@ module Snowflake
 
       # @todo On errors we should handle, cleanup, and then reraise...
       def up!
-        Snowflake::Migration.logger.info "Applying migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
+        Snowflake.logger.info "Applying migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
 
         if applied?
           raise DuplicateMigrationError, "Migration \"#{@title}\" (#{@version}) has already been applied to one or more of the target elements (#{applied_to.collect {|e| e.to_s }.join(', ')}) and cannot be applied again."
@@ -53,7 +53,7 @@ module Snowflake
       # @todo I don't think I've thought through undoing migrations particularly well, more thought needed...
       # @todo On errors we should handle, cleanup, and then reraise...
       def down!
-        Snowflake::Migration.logger.info "Undoing migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
+        Snowflake.logger.info "Undoing migration #{@title} (#{@version}) on: #{@elements.join(', ')}"
 
         unless applied?
           raise ArgumentError, "Migration \"#{@title}\" (#{@version}) has not been applied to one or more of the target elements (#{(@elements - applied_to).collect {|e| e.to_s }.join(', ')}) and therefore cannot be revert."

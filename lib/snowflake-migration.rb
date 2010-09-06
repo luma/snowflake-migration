@@ -4,7 +4,6 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'snowflake'
 require 'ostruct'
-require 'logger'
 
 module Snowflake
   module Migration
@@ -15,18 +14,6 @@ module Snowflake
     autoload :Migration,  dir + '/migration'
     autoload :Context,    dir + '/context'
     autoload :Schema,     dir + '/schema'
-
-    def self.logger=(logger)
-      @logger = logger
-    end
-    
-    def self.logger
-      @logger ||= begin
-        log = Logger.new(STDOUT)
-        log.level = Logger::INFO
-        log
-      end
-    end
   end # module Migration
 end # module Snowflake
 
