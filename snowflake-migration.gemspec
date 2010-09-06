@@ -7,8 +7,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Rolly Fordham"]
   s.email       = ["rolly@luma.co.nz"]
   s.homepage    = "http://github.com/luma/snowflake-migration"
-  s.summary     = "A Rails plugin to allow the Snowflake ORM to be used from within a Rails app."
-  s.description = "A Rails plugin to allow the Snowflake ORM to be used from within a Rails app."
+  s.summary     = "A gem to add schema change management (migrations) to Snowflake."
+  s.description = "This gem adds schema change management to Snowflake (http://github.com/luma/snowflake), including migrations and the ability to track schema changes within models over time."
 
   s.required_rubygems_version = ">= 1.3.6"
 
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project         = "snowflake-migration"
 
   # If you have other dependencies, add them here
-  s.add_dependency "snowflake", ">= 0.0.2"
+  s.add_dependency "snowflake", "~> 0.2.13"
 
   # If you need to check in files that aren't .rb files, add them here
   s.files        = Dir["{lib}/snowflake-migration.rb", "{lib}/snowflake-migration/*.rb", "LICENSE", "*.md", "README.rdoc"]
